@@ -1,3 +1,4 @@
+using FlagAcademy.DataAccess;
 using FlagAcademy.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -7,15 +8,17 @@ namespace FlagAcademy.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly FlagAcademyContext _context;
+        public HomeController(ILogger<HomeController> logger, FlagAcademyContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var flag = _context.Flags.First();
+            return View(flag);
         }
 
         public IActionResult Privacy()
