@@ -1,9 +1,21 @@
+using FlagAcademy.DataAccess;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDbContext<FlagAcademyContext>(
+    options =>
+        options
+            .UseNpgsql(builder.Configuration["FLAGACADEMY_DBCONNECTIONSTRING"])
+            .UseSnakeCaseNamingConvention()
+  );
+
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
