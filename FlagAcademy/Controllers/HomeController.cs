@@ -17,8 +17,8 @@ namespace FlagAcademy.Controllers
 
         public IActionResult Index()
         {
-            var flag = _context.Flags.First();
-            return View(flag);
+           // var flag = _context.Flags.First();
+            return View();
         }
 
         public IActionResult Privacy()
