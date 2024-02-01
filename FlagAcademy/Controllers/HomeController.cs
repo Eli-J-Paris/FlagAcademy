@@ -21,6 +21,15 @@ namespace FlagAcademy.Controllers
             return View();
         }
 
+        [Route("/play")]
+        public IActionResult Play()
+        {
+            var country = _context.Countries.First();
+            return View(country);
+        }
+
+
+
         public IActionResult Privacy()
         {
             return View();

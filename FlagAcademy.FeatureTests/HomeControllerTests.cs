@@ -23,5 +23,17 @@ namespace FlagAcademy.FeatureTests
             response.EnsureSuccessStatusCode();
             Assert.Contains("<h1>MainMenu</h1>", html);
         }
+
+        [Fact]
+        public async Task Play_ShowsGuessingGamePage()
+        {
+            var client = _factory.CreateClient();
+
+            var response = await client.GetAsync("/play");
+            var html = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+            Assert.Contains("<h1>Play game</h1>", html);
+        }
     }
 }

@@ -4,8 +4,10 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int FlagId { get; set; }
-        public Flag Flag { get; set; }
+        
+        //flag is the image path in root/worldimages/flag.jpeg
+        public string Flag { get; set; }
+       
         //fun fact, population, founding
     }
 }

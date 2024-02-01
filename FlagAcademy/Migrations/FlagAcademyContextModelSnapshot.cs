@@ -30,9 +30,10 @@ namespace FlagAcademy.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("FlagId")
-                        .HasColumnType("integer")
-                        .HasColumnName("flag_id");
+                    b.Property<string>("Flag")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("flag");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -42,49 +43,7 @@ namespace FlagAcademy.Migrations
                     b.HasKey("Id")
                         .HasName("pk_countries");
 
-                    b.HasIndex("FlagId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_countries_flag_id");
-
                     b.ToTable("countries", (string)null);
-                });
-
-            modelBuilder.Entity("FlagAcademy.Models.Flag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("image");
-
-                    b.HasKey("Id")
-                        .HasName("pk_flags");
-
-                    b.ToTable("flags", (string)null);
-                });
-
-            modelBuilder.Entity("FlagAcademy.Models.Country", b =>
-                {
-                    b.HasOne("FlagAcademy.Models.Flag", "Flag")
-                        .WithOne("Country")
-                        .HasForeignKey("FlagAcademy.Models.Country", "FlagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_countries_flags_flag_id");
-
-                    b.Navigation("Flag");
-                });
-
-            modelBuilder.Entity("FlagAcademy.Models.Flag", b =>
-                {
-                    b.Navigation("Country")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
