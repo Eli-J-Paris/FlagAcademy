@@ -2,6 +2,7 @@ using FlagAcademy.DataAccess;
 using FlagAcademy.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 
 namespace FlagAcademy.Controllers
 {
@@ -24,7 +25,9 @@ namespace FlagAcademy.Controllers
         [Route("/play")]
         public IActionResult Play()
         {
-            var country = _context.Countries.First();
+            Random rnd = new Random();
+            int rndnum = rnd.Next(1, 6);
+            var country = _context.Countries.Where(c=>c.Id == rndnum).First();
             return View(country);
         }
 
