@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FlagAcademy.Migrations
 {
     [DbContext(typeof(FlagAcademyContext))]
-    [Migration("20240130211725_CreateDB")]
-    partial class CreateDB
+    [Migration("20240201205515_CreateDb")]
+    partial class CreateDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace FlagAcademy.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("FlagAcademy.Models.Flag", b =>
+            modelBuilder.Entity("FlagAcademy.Models.Country", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,15 +33,20 @@ namespace FlagAcademy.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Image")
+                    b.Property<string>("Flag")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("image");
+                        .HasColumnName("flag");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
                     b.HasKey("Id")
-                        .HasName("pk_flags");
+                        .HasName("pk_countries");
 
-                    b.ToTable("flags", (string)null);
+                    b.ToTable("countries", (string)null);
                 });
 #pragma warning restore 612, 618
         }
