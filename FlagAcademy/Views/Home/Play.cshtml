@@ -1,11 +1,22 @@
 ﻿@* /WorldFlagImages/Flag of Afghanistan.jpg *@
 @model Country
+@{
+    List<Country> countries = ViewData["countries"] as List<Country>;
+}
 <h1>Play game</h1>
 
 <div class="text-center">
     <img src="@Model.Flag" width="640" height="480" />
     <h4>@Model.Name</h4>
+
+    @for (int i = 0; i < countries.Count; i++)
+    {
+        <h1>@countries[i].Name</h1>
+    }
 </div>
+
+
+
 @* @foreach(var country in Model)
 {
      <h1>@country.Name</h1>
