@@ -36,6 +36,18 @@ namespace FlagAcademy.Controllers
             return View(country);
         }
 
+        [HttpGet]
+        [Route("/processguess")]
+        public IActionResult ProcessGuess(string correctAnswer, string guess)
+        {
+            string response ="WRONG";
+            if(correctAnswer == guess)
+            {
+                response = "CORRECT";
+            }
+            ViewData["response"] = response;
+            return View();
+        }
 
         public List<Country> GenerateWrongAnswers(Country correctAnswer)
         {
