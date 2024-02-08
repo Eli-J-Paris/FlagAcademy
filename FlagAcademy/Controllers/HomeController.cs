@@ -1,6 +1,7 @@
 using FlagAcademy.DataAccess;
 using FlagAcademy.Models;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
 
@@ -36,17 +37,20 @@ namespace FlagAcademy.Controllers
             return View(country);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("/processguess")]
-        public IActionResult ProcessGuess(string correctAnswer, string guess)
+        public async Task<IActionResult> ProcessGuess([FromBody]UserGuess userGuess)
         {
             string response ="WRONG";
-            if(correctAnswer == guess)
+            if(userGuess.CorrectAnswer == userGuess.Guess)
             {
                 response = "CORRECT";
             }
-            ViewData["response"] = response;
-            return View();
+
+            Log.Information($"Correct Answer: {userGuess.CorrectAnswer}\nGuess:{userGuess.Guess}");
+            //ViewData["response"] = response;
+ 
+            return Ok(response);
         }
 
         public List<Country> GenerateWrongAnswers(Country correctAnswer)

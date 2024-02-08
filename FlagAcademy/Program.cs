@@ -1,5 +1,6 @@
 using FlagAcademy.DataAccess;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,5 +36,10 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.File("logs/FlagAcademy.txt", rollingInterval: RollingInterval.Day).CreateLogger();
+
 
 app.Run();

@@ -11,19 +11,38 @@
 
     @for (int i = 0; i < countries.Count; i++)
     {
-        <form method="get" action="/processguess">
+        <form method="get" action="/processguess" id="guess-@i">
             <input type="hidden" value="@Model.Name" name="correctAnswer" />
             <input type = "hidden" value="@countries[i].Name" name="guess" />
-            <button type="submit">@countries[i].Name</button>
+            <button type="button" onclick="makeGuess('@countries[i].Name')">@countries[i].Name</button>
         </form>
     }
 </div>
 
 
 
-@* @foreach(var country in Model)
-{
-     <h1>@country.Name</h1>
-    <img src="@country.Flag" />  
-}
- *@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    // Define makeGuess function in the global scope
+    function makeGuess(country) {
+        $.ajax({
+            url: '/processguess',
+            type: 'POST',
+            data: JSON.stringify({ CorrectAnswer: '@Model.Name', Guess: country }),
+            contentType: 'application/json',
+            async: true,
+            success: function (response) {
+                alert(response);
+            },
+            error: function (xhr, status, error) {
+                alert("error!!!");
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        // Call makeGuess function with a country argument
+        makeGuess('CountryName');
+    });
+</script>
