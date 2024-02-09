@@ -19,6 +19,11 @@
     }
 </div>
 
+<div class="visually-hidden">
+    <form method="get" action ="/play">
+        <button type="submit">next</button>
+    </form>
+</div>
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -34,6 +39,7 @@
             async: true,
             success: function (response) {
                 alert(response);
+                RemoveHiddenClass();
             },
             error: function (xhr, status, error) {
                 alert("error!!!");
@@ -41,8 +47,15 @@
         });
     }
 
+    function RemoveHiddenClass() {
+        const hiddenElement = document.querySelector(".visually-hidden")
+        hiddenElement.classList.remove("visually-hidden")
+        // hiddenElements.forEach(element => {
+        //     element.classList.remove(".visually-hidden");
+        // });
+    }
+
     $(document).ready(function () {
         // Call makeGuess function with a country argument
-        makeGuess('CountryName');
     });
 </script>
