@@ -7,15 +7,26 @@
 
 <div class="text-center">
     <img src="@Model.Flag" width="640" height="480" />
-    <h4>@Model.Name</h4>
 
     @for (int i = 0; i < countries.Count; i++)
     {
-        <form method="get" action="/processguess" id="guess-@i">
-            <input type="hidden" value="@Model.Name" name="correctAnswer" />
-            <input type = "hidden" value="@countries[i].Name" name="guess" />
-            <button type="button" onclick="makeGuess('@countries[i].Name')">@countries[i].Name</button>
-        </form>
+        if(Model.Name == countries[i].Name)
+        {
+            <form method="get" action="/processguess" id="guess-@i">
+                <input type="hidden" value="@Model.Name" name="correctAnswer" />
+                <input type="hidden" value="@countries[i].Name" name="guess" />
+                <button id="right-answer" type="button" onclick="makeGuess('@countries[i].Name')">@countries[i].Name</button>
+            </form>
+        }
+        else
+        {
+            <form method="get" action="/processguess" id="guess-@i">
+                <input type="hidden" value="@Model.Name" name="correctAnswer" />
+                <input type="hidden" value="@countries[i].Name" name="guess" />
+                <button id="wrong-answer" type="button" onclick="makeGuess('@countries[i].Name')">@countries[i].Name</button>
+            </form>
+        }
+      
     }
 </div>
 
@@ -25,6 +36,17 @@
     </form>
 </div>
 
+
+
+<style>
+    .bad-answer{
+        background-color:red;
+    }
+
+    .good-answer{
+        background-color:green;
+    }
+</style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -38,8 +60,9 @@
             contentType: 'application/json',
             async: true,
             success: function (response) {
-                alert(response);
                 RemoveHiddenClass();
+                UpdateRightAnswer();
+                UpdateWrongAnswers();
             },
             error: function (xhr, status, error) {
                 alert("error!!!");
@@ -50,9 +73,18 @@
     function RemoveHiddenClass() {
         const hiddenElement = document.querySelector(".visually-hidden")
         hiddenElement.classList.remove("visually-hidden")
-        // hiddenElements.forEach(element => {
-        //     element.classList.remove(".visually-hidden");
-        // });
+    }
+
+    function UpdateRightAnswer(){
+        const answer = document.querySelector('#right-answer')
+        answer.classList.add('good-answer')
+    }
+
+    function UpdateWrongAnswers() {
+        const answers = document.querySelectorAll('#wrong-answer')
+        answers.forEach((element) => {
+            element.classList.add('bad-answer')
+        })
     }
 
     $(document).ready(function () {
