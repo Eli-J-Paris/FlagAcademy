@@ -65,6 +65,7 @@
                 RemoveHiddenClass();
                 UpdateRightAnswer();
                 UpdateWrongAnswers();
+                DisableGuessingButtons();
                 if (response == "CORRECT") {
                     UpdateScore();
                 }      
@@ -95,8 +96,16 @@
     function UpdateScore() {
         var score = parseInt(document.querySelector('#score').innerHTML)
         document.querySelector('#score').innerHTML = score + 1;
+    }
 
+    function DisableGuessingButtons() {
+      var button = document.getElementById("right-answer");
+           button.disabled = true;
 
+        const buttons = document.querySelectorAll('#wrong-answer')
+        buttons.forEach((element) => {
+            element.disabled = true;
+        })
     }
 
     $(document).ready(function () {
