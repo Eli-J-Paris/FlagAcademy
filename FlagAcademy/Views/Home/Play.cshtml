@@ -2,9 +2,11 @@
 @model Country
 @{
     List<Country> countries = ViewData["countries"] as List<Country>;
+    GameTracker gameTracker = ViewData["gameTracker"] as GameTracker;
 }
 <h1>Play game</h1>
 
+<h1 id="score">0</h1>
 <div class="text-center">
     <img src="@Model.Flag" width="640" height="480" />
 
@@ -30,8 +32,9 @@
     }
 </div>
 
+<h1>@gameTracker.Id</h1>
 <div class="visually-hidden">
-    <form method="get" action ="/play">
+    <form method="get" action ="/play/@gameTracker.Id">
         <button type="submit">next</button>
     </form>
 </div>
@@ -51,10 +54,9 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    // Define makeGuess function in the global scope
     function makeGuess(country) {
         $.ajax({
-            url: '/processguess',
+            url: '/processguess/@gameTracker.Id',
             type: 'POST',
             data: JSON.stringify({ CorrectAnswer: '@Model.Name', Guess: country }),
             contentType: 'application/json',
@@ -63,6 +65,9 @@
                 RemoveHiddenClass();
                 UpdateRightAnswer();
                 UpdateWrongAnswers();
+                if (response == "CORRECT") {
+                    UpdateScore();
+                }      
             },
             error: function (xhr, status, error) {
                 alert("error!!!");
@@ -85,6 +90,13 @@
         answers.forEach((element) => {
             element.classList.add('bad-answer')
         })
+    }
+
+    function UpdateScore() {
+        var score = parseInt(document.querySelector('#score').innerHTML)
+        document.querySelector('#score').innerHTML = score + 1;
+
+
     }
 
     $(document).ready(function () {
