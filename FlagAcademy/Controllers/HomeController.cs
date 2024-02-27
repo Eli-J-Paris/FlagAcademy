@@ -1,4 +1,5 @@
 using FlagAcademy.DataAccess;
+using FlagAcademy.Migrations;
 using FlagAcademy.Models;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -23,34 +24,66 @@ namespace FlagAcademy.Controllers
             return View();
         }
 
-        [Route("/play")]
-        public IActionResult Play()
+        //new game controller vs just a stand alone play controller
+
+        [HttpGet]
+        [Route("/newgame")]
+        public IActionResult NewGame()
         {
+            GameTracker gameTracker = new GameTracker { Score = "0" };
+            _context.GameTrackers.Add(gameTracker);
+            _context.SaveChanges();
+
+            return Redirect($"/play/{gameTracker.Id}");
+        }
+
+        [HttpGet]
+        [Route("/play/{id}")]
+        public IActionResult Play(int id)
+        {
+            if (id == 0) 
+                return BadRequest();
+
             Random rnd = new Random();
             int randomFlag = rnd.Next(1, 6);
 
             var country = _context.Countries.Where(c=>c.Id == randomFlag).First();
             var countries = _context.Countries.ToList();
 
+            var gameTracker = _context.GameTrackers.Find(id);
+
+            ViewData["gameTracker"] = gameTracker;
             ViewData["countries"] = GenerateWrongAnswers(country);
+
 
             return View(country);
         }
 
         [HttpPost]
-        [Route("/processguess")]
-        public async Task<IActionResult> ProcessGuess([FromBody]UserGuess userGuess)
+        [Route("/processguess/{id}")]
+        public async Task<IActionResult> ProcessGuess([FromBody]UserGuess userGuess, int id)
         {
             string response ="WRONG";
             if(userGuess.CorrectAnswer == userGuess.Guess)
             {
                 response = "CORRECT";
+                IncreaseScore(id);
             }
 
-            Log.Information($"Correct Answer: {userGuess.CorrectAnswer}\nGuess:{userGuess.Guess}");
-            //ViewData["response"] = response;
- 
+            var gameTracker = _context.GameTrackers.Find(id);
+            ViewData["gameTracker"] = gameTracker;
+
+            //Log.Information($"Correct Answer: {userGuess.CorrectAnswer}\nGuess:{userGuess.Guess}");
             return Ok(response);
+        }
+
+
+        public void IncreaseScore(int gametrackerID)
+        {
+            var currentGameTracker = _context.GameTrackers.Find(gametrackerID);
+            currentGameTracker.Score = (Convert.ToInt32(currentGameTracker.Score) + 1).ToString();
+            _context.Update(currentGameTracker);
+            _context.SaveChanges();
         }
 
         public List<Country> GenerateWrongAnswers(Country correctAnswer)
