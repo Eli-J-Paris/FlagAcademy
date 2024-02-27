@@ -81,7 +81,7 @@ namespace FlagAcademy.Controllers
         public void IncreaseScore(int gametrackerID)
         {
             var currentGameTracker = _context.GameTrackers.Find(gametrackerID);
-            currentGameTracker.Score = currentGameTracker.Score + 1;
+            currentGameTracker.Score = (Convert.ToInt32(currentGameTracker.Score) + 1).ToString();
             _context.Update(currentGameTracker);
             _context.SaveChanges();
         }
