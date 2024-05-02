@@ -30,7 +30,7 @@ namespace FlagAcademy.Controllers
         [Route("/newgame")]
         public IActionResult NewGame()
         {
-            GameTracker gameTracker = new GameTracker { Score = "0", CurrentQuestion = 0, GameLength = 5 };
+            GameTracker gameTracker = new GameTracker { Score = "0", CurrentQuestion = 1, GameLength = 5 };
             _context.GameTrackers.Add(gameTracker);
             _context.SaveChanges();
 
@@ -72,7 +72,7 @@ namespace FlagAcademy.Controllers
 
             IncrementCurrentQuestion(id);
 
-            if (EndGame(id)) 
+            if (IsEndGame(id)) 
             {
                 response = "ENDGAME";
             }
@@ -82,6 +82,14 @@ namespace FlagAcademy.Controllers
 
             //Log.Information($"Correct Answer: {userGuess.CorrectAnswer}\nGuess:{userGuess.Guess}");
             return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("/endgame/{id}")]
+        public IActionResult EndGame(int id)
+        {
+            var gameTracker = _context.GameTrackers.Find(id);
+            return View(gameTracker);
         }
 
 
@@ -101,7 +109,7 @@ namespace FlagAcademy.Controllers
             _context.SaveChanges();
         }
 
-        public bool EndGame(int gametrackerId)
+        public bool IsEndGame(int gametrackerId)
         {
             var currentGameTracker = _context.GameTrackers.Find(gametrackerId);
             if (currentGameTracker.CurrentQuestion > currentGameTracker.GameLength) 
