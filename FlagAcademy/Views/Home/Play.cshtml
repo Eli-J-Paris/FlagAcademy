@@ -7,6 +7,7 @@
 <h1>Play game</h1>
 
 <h1 id="score">@gameTracker.Score</h1>
+<h1>@gameTracker.CurrentQuestion/@gameTracker.GameLength</h1>
 <div class="text-center">
     <img src="@Model.Flag" width="640" height="480" />
 
@@ -68,7 +69,11 @@
                 DisableGuessingButtons();
                 if (response == "CORRECT") {
                     UpdateScore();
-                }      
+                }
+                else if (response == "ENDGAME") {
+                    
+                    window.location.href = '/';
+                }
             },
             error: function (xhr, status, error) {
                 alert("error!!!");
