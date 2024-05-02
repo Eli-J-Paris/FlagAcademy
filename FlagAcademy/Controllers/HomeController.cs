@@ -24,13 +24,13 @@ namespace FlagAcademy.Controllers
             return View();
         }
 
-        //new game controller vs just a stand alone play controller
+        //new game controller is only hit when a new game in started I.E the play link is pressed
 
         [HttpGet]
         [Route("/newgame")]
         public IActionResult NewGame()
         {
-            GameTracker gameTracker = new GameTracker { Score = "0" };
+            GameTracker gameTracker = new GameTracker { Score = "0", CurrentQuestion = 1, GameLength = 5 };
             _context.GameTrackers.Add(gameTracker);
             _context.SaveChanges();
 
@@ -70,6 +70,13 @@ namespace FlagAcademy.Controllers
                 IncreaseScore(id);
             }
 
+            IncrementCurrentQuestion(id);
+
+            if (IsEndGame(id)) 
+            {
+                response = "ENDGAME";
+            }
+
             var gameTracker = _context.GameTrackers.Find(id);
             ViewData["gameTracker"] = gameTracker;
 
@@ -77,13 +84,38 @@ namespace FlagAcademy.Controllers
             return Ok(response);
         }
 
-
-        public void IncreaseScore(int gametrackerID)
+        [HttpGet]
+        [Route("/endgame/{id}")]
+        public IActionResult EndGame(int id)
         {
-            var currentGameTracker = _context.GameTrackers.Find(gametrackerID);
+            var gameTracker = _context.GameTrackers.Find(id);
+            return View(gameTracker);
+        }
+
+
+        public void IncreaseScore(int gametrackerId)
+        {
+            var currentGameTracker = _context.GameTrackers.Find(gametrackerId);
             currentGameTracker.Score = (Convert.ToInt32(currentGameTracker.Score) + 1).ToString();
             _context.Update(currentGameTracker);
             _context.SaveChanges();
+        }
+
+        public void IncrementCurrentQuestion(int gametrackerId)
+        {
+            var currentGameTracker = _context.GameTrackers.Find(gametrackerId);
+            currentGameTracker.CurrentQuestion++;
+            _context.Update(currentGameTracker);
+            _context.SaveChanges();
+        }
+
+        public bool IsEndGame(int gametrackerId)
+        {
+            var currentGameTracker = _context.GameTrackers.Find(gametrackerId);
+            if (currentGameTracker.CurrentQuestion > currentGameTracker.GameLength) 
+                return true;
+
+            return false;
         }
 
         public List<Country> GenerateWrongAnswers(Country correctAnswer)

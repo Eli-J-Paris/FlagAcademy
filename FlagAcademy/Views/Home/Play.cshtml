@@ -6,7 +6,8 @@
 }
 <h1>Play game</h1>
 
-<h1 id="score">@gameTracker.Score</h1>
+<h1 id="score">Score: @gameTracker.Score</h1>
+<h1>Question: @gameTracker.CurrentQuestion/@gameTracker.GameLength</h1>
 <div class="text-center">
     <img src="@Model.Flag" width="640" height="480" />
 
@@ -39,6 +40,11 @@
     </form>
 </div>
 
+<div class="visually-hidden" id="results">
+    <form method="get" action="/endgame/@gameTracker.Id">
+        <button type = "submit">Results</button>
+    </form>
+</div>
 
 
 <style>
@@ -62,13 +68,20 @@
             contentType: 'application/json',
             async: true,
             success: function (response) {
-                RemoveHiddenClass();
+                if (response != "ENDGAME") {
+                    RemoveHiddenClass();
+                }
                 UpdateRightAnswer();
                 UpdateWrongAnswers();
                 DisableGuessingButtons();
                 if (response == "CORRECT") {
                     UpdateScore();
-                }      
+                }
+                else if (response == "ENDGAME") {
+                    
+                    // window.location.href = '/endgame/@gameTracker.Id';
+                    RevealResultsButton();
+                }
             },
             error: function (xhr, status, error) {
                 alert("error!!!");
@@ -106,6 +119,11 @@
         buttons.forEach((element) => {
             element.disabled = true;
         })
+    }
+
+    function RevealResultsButton() {
+        const resultsDiv = document.querySelector("#results")
+        resultsDiv.classList.remove("visually-hidden")
     }
 
     $(document).ready(function () {
