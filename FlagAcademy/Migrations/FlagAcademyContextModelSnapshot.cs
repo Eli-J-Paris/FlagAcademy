@@ -63,9 +63,8 @@ namespace FlagAcademy.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("game_length");
 
-                    b.Property<string>("Score")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("Score")
+                        .HasColumnType("integer")
                         .HasColumnName("score");
 
                     b.HasKey("Id")
