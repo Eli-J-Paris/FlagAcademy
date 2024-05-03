@@ -30,7 +30,7 @@ namespace FlagAcademy.Controllers
         [Route("/newgame")]
         public IActionResult NewGame()
         {
-            GameTracker gameTracker = new GameTracker { Score = "0", CurrentQuestion = 1, GameLength = 5 };
+            GameTracker gameTracker = new GameTracker { Score = 0, CurrentQuestion = 1, GameLength = 5 };
             _context.GameTrackers.Add(gameTracker);
             _context.SaveChanges();
 
@@ -96,7 +96,7 @@ namespace FlagAcademy.Controllers
         public void IncreaseScore(int gametrackerId)
         {
             var currentGameTracker = _context.GameTrackers.Find(gametrackerId);
-            currentGameTracker.Score = (Convert.ToInt32(currentGameTracker.Score) + 1).ToString();
+            currentGameTracker.Score++;
             _context.Update(currentGameTracker);
             _context.SaveChanges();
         }

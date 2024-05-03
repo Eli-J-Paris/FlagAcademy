@@ -108,7 +108,8 @@
 
     function UpdateScore() {
         var score = parseInt(document.querySelector('#score').innerHTML)
-        document.querySelector('#score').innerHTML = score + 1;
+    parseInt(document.querySelector('#score').innerHTML) = score + 1;
+     
     }
 
     function DisableGuessingButtons() {
