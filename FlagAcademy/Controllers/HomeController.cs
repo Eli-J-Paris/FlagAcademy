@@ -20,7 +20,6 @@ namespace FlagAcademy.Controllers
 
         public IActionResult Index()
         {
-           // var flag = _context.Flags.First();
             return View();
         }
 
@@ -30,7 +29,13 @@ namespace FlagAcademy.Controllers
         [Route("/newgame")]
         public IActionResult NewGame()
         {
-            GameTracker gameTracker = new GameTracker { Score = 0, CurrentQuestion = 1, GameLength = 5 };
+
+            string gameLengthCookie = Request.Cookies["GameLength"];
+
+            if (gameLengthCookie == null) gameLengthCookie = "5";
+            
+
+            GameTracker gameTracker = new GameTracker { Score = 0, CurrentQuestion = 1, GameLength = Convert.ToInt32(gameLengthCookie)};
             _context.GameTrackers.Add(gameTracker);
             _context.SaveChanges();
 
